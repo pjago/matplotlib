@@ -1112,8 +1112,11 @@ cursord = {
 
 
 class NavigationToolbar2Wx(NavigationToolbar2, wx.ToolBar):
-    def __init__(self, canvas):
-        wx.ToolBar.__init__(self, canvas.GetParent(), -1)
+    def __init__(self, canvas, parent=None):
+        if parent is None:
+            parent = canvas.GetParent()
+        self._parent = parent
+        wx.ToolBar.__init__(self, parent, -1)
         NavigationToolbar2.__init__(self, canvas)
         self._idle = True
         self.prevZoomRect = None
@@ -1128,8 +1131,6 @@ class NavigationToolbar2Wx(NavigationToolbar2, wx.ToolBar):
 
     def _init_toolbar(self):
         _log.debug("%s - _init_toolbar", type(self))
-
-        self._parent = self.canvas.GetParent()
 
         self.wx_ids = {}
         for text, tooltip_text, image_file, callback in self.toolitems:
